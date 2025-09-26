@@ -120,6 +120,17 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # এটা SecurityMiddleware এর ঠিক নিচে
+    'django.middleware.security.SecurityMiddleware',
+    ...
+]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
 import os
 # ... other settings ...
 MEDIA_URL = '/media/'
