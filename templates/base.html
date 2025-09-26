@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}IQRA YEAFHY - Portfolio{% endblock %}</title>
+    <link rel="icon" href="https://scontent.fdac41-1.fna.fbcdn.net/v/t39.30808-6/496001485_1629211101536231_7545406968407239731_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGSW30abF8F7J-5vUs7y35n88OLQnSKqB_zw4tCdIqoH3ciIHIb9IOEUifd_3I6IgIKq1iwSrv5UTAmFwl27vku&_nc_ohc=l5oidAFc-DkQ7kNvwHdhsnc&_nc_oc=Adk72f6-f4OnA0As_Re-PJfvXfjGBNqzgOe88lyBRYzCqOjcHh_BGANLhRHxuTYwkbU&_nc_zt=23&_nc_ht=scontent.fdac41-1.fna&_nc_gid=pXHwotJvMU8hCL9BC4vGbg&oh=00_AfawNbDR-MaVNwalwkS6C0uX8EavR0wqiJ1su0QW-xYyAQ&oe=68DB6F38">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind config to allow custom variables
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'iqra-pink': '#b3597c',
+                        'iqra-pink-light': '#ffe6f5',
+                        'iqra-dark': '#1a1a2e',
+                        'iqra-dark-light': '#2e2e42',
+                    },
+                    gradientColorStops: {
+                        'iqra-pink-start': '#b35986ff',
+                        'iqra-pink-end': '#ff99cc',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="transition-colors duration-300">
+
+    <header class="bg-gradient-to-r from-iqra-pink-start to-iqra-pink-end shadow-sm sticky top-0 z-50 transition-colors duration-300">
+        <nav class="container mx-auto px-4 py-4 flex items-center justify-between flex-wrap">
+            <a href="{% url 'home' %}" class="text-2xl font-bold text-white">IQRA YEAFHY</a>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full text-white hover:text-gray-300 focus:outline-none transition-colors duration-300">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                </button>
+                <div class="block lg:hidden">
+                    <button id="menu-toggle" class="flex items-center px-3 py-2 border rounded text-white border-white hover:text-gray-300 hover:border-gray-300">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="nav-menu" class="w-full block flex-grow lg:flex lg:items-center lg:w-auto hidden">
+                <div class="text-sm lg:flex-grow lg:flex lg:justify-end">
+                    <a href="{% url 'home' %}" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-300 px-4 py-2 rounded-md transition-colors duration-300">Home</a>
+                    <a href="{% url 'about' %}" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-300 px-4 py-2 rounded-md transition-colors duration-300">About</a>
+                    <a href="{% url 'portfolio' %}" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-300 px-4 py-2 rounded-md transition-colors duration-300">Portfolio</a>
+                    <a href="{% url 'contact' %}" class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-300 px-4 py-2 rounded-md transition-colors duration-300">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-gradient-to-r from-iqra-pink-start to-iqra-pink-end text-white py-8 transition-colors duration-300">
+        <div class="container mx-auto text-center">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="https://www.linkedin.com/in/iqrayeafhyira/" target="_blank" class="text-white hover:text-gray-300 text-2xl transition-colors duration-300"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.facebook.com/IqraYeafhyIra" target="_blank" class="text-white hover:text-gray-300 text-2xl transition-colors duration-300"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/yeafhy_tafi/" target="_blank" class="text-white hover:text-gray-300 text-2xl transition-colors duration-300"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p>&copy; 2025 IQRA YEAFHY. All rights reserved x Team ZeroDev.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('hidden');
+        });
+
+        // Dark/Light mode toggle
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        const applyTheme = (theme) => {
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            }
+            localStorage.setItem('theme', theme);
+        };
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        });
+
+        // Check for saved theme preference on page load
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            applyTheme('dark');
+        } else {
+            applyTheme('light');
+        }
+    </script>
+</body>
+</html>
