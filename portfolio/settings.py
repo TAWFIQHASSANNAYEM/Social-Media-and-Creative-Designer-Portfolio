@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import urlparse
 
 from decouple import config
 
@@ -21,9 +22,28 @@ ALLOWED_HOSTS = [
     ).split(",")
     if host.strip()
 ]
-RENDER_EXTERNAL_HOSTNAME = config("RENDER_EXTERNAL_HOSTNAME", default="")
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+def _normalize_host(value: str) -> str:
+    value = value.strip()
+    if not value:
+        return ""
+    if "://" in value:
+        return urlparse(value).hostname or ""
+    return value
+
+
+render_hosts = [
+    config("RENDER_EXTERNAL_HOSTNAME", default=""),
+    config("RENDER_EXTERNAL_URL", default=""),
+]
+render_service_name = config("RENDER_SERVICE_NAME", default="")
+if render_service_name:
+    render_hosts.append(f"{render_service_name}.onrender.com")
+
+for host in render_hosts:
+    host = _normalize_host(host)
+    if host and host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
 
 
 INSTALLED_APPS = [
@@ -146,10 +166,12 @@ CSRF_TRUSTED_ORIGINS = [
     ).split(",")
     if origin.strip()
 ]
-if RENDER_EXTERNAL_HOSTNAME:
-    render_origin = f"https://{RENDER_EXTERNAL_HOSTNAME}"
-    if render_origin not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append(render_origin)
+for host in render_hosts:
+    host = _normalize_host(host)
+    if host:
+        render_origin = f"https://{host}"
+        if render_origin not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(render_origin)
 
 
 REST_FRAMEWORK = {
