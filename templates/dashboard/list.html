@@ -1,0 +1,82 @@
+{% extends "dashboard/base.html" %}
+{% load dashboard_extras %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="font-heading text-3xl">{{ title }}</h1>
+        <p class="text-sm text-slate-500">{{ empty_message }}</p>
+      </div>
+      {% if create_url_name %}
+        <a
+          class="rounded-full bg-blush-500 px-5 py-2 text-sm text-white shadow hover:bg-blush-600"
+          href="{% url create_url_name %}"
+        >
+          + Add new
+        </a>
+      {% endif %}
+    </div>
+
+    <form method="get" class="flex gap-3">
+      <input
+        type="text"
+        name="q"
+        value="{{ search_query }}"
+        placeholder="Search..."
+        class="w-full max-w-md rounded-full border border-blush-200 px-4 py-2 text-sm"
+      />
+      <button class="rounded-full border border-blush-200 px-4 py-2 text-sm text-blush-600">
+        Search
+      </button>
+    </form>
+
+    <div class="overflow-x-auto rounded-2xl bg-white shadow">
+      <table class="min-w-full text-sm">
+        <thead class="bg-blush-50 text-left text-xs uppercase tracking-wide text-slate-400">
+          <tr>
+            {% for column in columns %}
+              <th class="px-4 py-3">{{ column.label }}</th>
+            {% endfor %}
+            <th class="px-4 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in object_list %}
+            <tr class="border-b border-blush-50">
+              {% for column in columns %}
+                {% with value=item|attr:column.name %}
+                  <td class="px-4 py-3">
+                    {% if column.type == "image" and value %}
+                      <img src="{{ value.url }}" alt="" class="h-12 w-12 rounded-lg object-cover" />
+                    {% elif value is True %}
+                      <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs text-emerald-700">Active</span>
+                    {% elif value is False %}
+                      <span class="rounded-full bg-rose-100 px-3 py-1 text-xs text-rose-700">Hidden</span>
+                    {% else %}
+                      <span class="text-slate-700">{{ value|truncatechars:60 }}</span>
+                    {% endif %}
+                  </td>
+                {% endwith %}
+              {% endfor %}
+              <td class="px-4 py-3">
+                <div class="flex gap-2">
+                  <a class="text-blush-600 hover:underline" href="{% url edit_url_name item.pk %}">Edit</a>
+                  <a class="text-rose-600 hover:underline" href="{% url delete_url_name item.pk %}">Delete</a>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="{{ columns|length|add:'1' }}" class="px-4 py-6 text-center text-sm text-slate-500">
+                {{ empty_message }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

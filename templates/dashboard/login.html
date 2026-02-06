@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              heading: ["Outfit", "sans-serif"],
+              body: ["Plus Jakarta Sans", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-gradient-to-br from-pink-50 via-white to-pink-100 font-body">
+    <div class="min-h-screen flex items-center justify-center px-4">
+      <div class="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl">
+        <h1 class="font-heading text-2xl text-slate-800">Welcome back</h1>
+        <p class="mt-2 text-sm text-slate-500">Sign in to manage your portfolio.</p>
+
+        {% if form.errors %}
+          <div class="mt-4 rounded-xl bg-rose-50 p-3 text-sm text-rose-600">
+            Invalid username or password. Try again.
+          </div>
+        {% endif %}
+
+        <form method="post" class="mt-6 space-y-4">
+          {% csrf_token %}
+          <div>
+            <label class="text-sm text-slate-600">Username</label>
+            <input
+              type="text"
+              name="username"
+              class="mt-1 w-full rounded-xl border border-pink-200 px-4 py-2 text-sm focus:border-pink-400 focus:outline-none"
+              required
+            />
+          </div>
+          <div>
+            <label class="text-sm text-slate-600">Password</label>
+            <input
+              type="password"
+              name="password"
+              class="mt-1 w-full rounded-xl border border-pink-200 px-4 py-2 text-sm focus:border-pink-400 focus:outline-none"
+              required
+            />
+          </div>
+          <button class="w-full rounded-full bg-pink-500 py-2 text-sm text-white hover:bg-pink-600">
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

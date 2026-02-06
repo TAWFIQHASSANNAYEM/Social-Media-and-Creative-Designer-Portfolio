@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              heading: ["Outfit", "sans-serif"],
+              body: ["Plus Jakarta Sans", "sans-serif"],
+            },
+            colors: {
+              blush: {
+                50: "#fff1f7",
+                100: "#ffe3ef",
+                200: "#ffc7e1",
+                300: "#ff9cc8",
+                400: "#ff77b2",
+                500: "#ff4f9b",
+                600: "#e43b86",
+                700: "#bf2f6e",
+                800: "#992555",
+                900: "#6f1b3e",
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-blush-50 font-body text-slate-800">
+    <div class="min-h-screen lg:flex">
+      <aside
+        class="bg-gradient-to-b from-blush-600 to-blush-400 text-white lg:w-72 px-6 py-8"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="h-10 w-10 rounded-2xl bg-white/20 flex items-center justify-center font-heading text-lg"
+          >
+            ✨
+          </div>
+          <div>
+            <p class="font-heading text-xl">Studio Dashboard</p>
+            <p class="text-sm text-white/80">Manage your portfolio</p>
+          </div>
+        </div>
+
+        <nav class="mt-10 space-y-2 text-sm">
+          <a href="{% url 'dashboard:home' %}" class="block rounded-xl px-4 py-2 bg-white/10 hover:bg-white/20">Overview</a>
+          <a href="{% url 'dashboard:profile' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Site Profile</a>
+          <a href="{% url 'dashboard:about_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">About Cards</a>
+          <a href="{% url 'dashboard:service_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Services</a>
+          <a href="{% url 'dashboard:feature_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Features</a>
+          <a href="{% url 'dashboard:highlight_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Highlights</a>
+          <a href="{% url 'dashboard:social_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Social Links</a>
+          <a href="{% url 'dashboard:skill_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Skills</a>
+          <a href="{% url 'dashboard:project_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Projects</a>
+          <a href="{% url 'dashboard:experience_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Experience</a>
+        </nav>
+
+        <div class="mt-10 text-xs text-white/80">
+          <p>Signed in as</p>
+          <p class="font-semibold">{{ request.user.username }}</p>
+          <a
+            href="{% url 'dashboard:logout' %}"
+            class="mt-3 inline-flex rounded-full bg-white/20 px-3 py-1 text-xs"
+            >Logout</a
+          >
+        </div>
+      </aside>
+
+      <main class="flex-1 px-6 py-8 lg:px-10">
+        <div class="max-w-5xl mx-auto">
+          {% if messages %}
+            <div class="space-y-2 mb-6">
+              {% for message in messages %}
+                <div class="rounded-xl bg-white p-4 text-sm shadow">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% block content %}{% endblock %}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

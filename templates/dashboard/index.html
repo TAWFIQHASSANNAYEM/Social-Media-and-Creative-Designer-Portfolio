@@ -1,0 +1,48 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Dashboard Overview{% endblock %}
+
+{% block content %}
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-2">
+      <h1 class="font-heading text-3xl">Dashboard Overview</h1>
+      <p class="text-sm text-slate-500">Quick insights and shortcuts to update your site.</p>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-3">
+      {% for stat in stats %}
+        <div class="rounded-2xl bg-white p-5 shadow">
+          <p class="text-xs uppercase tracking-wide text-slate-400">{{ stat.label }}</p>
+          <p class="mt-2 font-heading text-3xl text-blush-600">{{ stat.value }}</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div class="rounded-2xl bg-white p-6 shadow">
+        <h2 class="font-heading text-xl">Quick actions</h2>
+        <ul class="mt-4 space-y-3 text-sm text-slate-600">
+          <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:profile' %}">Edit site profile</a></li>
+          <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:project_create' %}">Add a new project</a></li>
+          <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:service_create' %}">Add a service</a></li>
+          <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:highlight_create' %}">Add a highlight</a></li>
+        </ul>
+      </div>
+      <div class="rounded-2xl bg-white p-6 shadow">
+        <h2 class="font-heading text-xl">Need to update the front page?</h2>
+        <p class="mt-3 text-sm text-slate-600">
+          Update the Site Profile, About Cards, Services, and Highlights sections to
+          refresh the hero, about, and stats areas on your portfolio.
+        </p>
+        <div class="mt-5 flex gap-3 flex-wrap">
+          <a class="rounded-full bg-blush-500 px-4 py-2 text-sm text-white" href="{% url 'dashboard:profile' %}">
+            Go to profile
+          </a>
+          <a class="rounded-full border border-blush-200 px-4 py-2 text-sm text-blush-600" href="{% url 'dashboard:about_list' %}">
+            About cards
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
