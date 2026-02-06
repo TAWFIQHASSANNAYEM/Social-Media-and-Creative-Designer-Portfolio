@@ -6,6 +6,7 @@ from .models import (
     Experience,
     Feature,
     Highlight,
+    MediaAsset,
     Project,
     Service,
     SiteProfile,
@@ -18,6 +19,7 @@ from .serializers import (
     ExperienceSerializer,
     FeatureSerializer,
     HighlightSerializer,
+    MediaAssetSerializer,
     ProjectSerializer,
     ServiceSerializer,
     SiteProfileSerializer,
@@ -72,3 +74,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
     queryset = Feature.objects.all().order_by("order", "id")
     serializer_class = FeatureSerializer
 
+
+class MediaAssetViewSet(viewsets.ModelViewSet):
+    queryset = MediaAsset.objects.all().order_by("-created_at")
+    serializer_class = MediaAssetSerializer

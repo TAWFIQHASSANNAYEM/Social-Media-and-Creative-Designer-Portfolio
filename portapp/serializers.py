@@ -11,6 +11,7 @@ from .models import (
     SiteProfile,
     Skill,
     SocialLink,
+    MediaAsset,
 )
 
 
@@ -28,6 +29,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "image",
+            "image_url",
             "category",
             "date_created",
             "url",
@@ -61,6 +63,7 @@ class SiteProfileSerializer(serializers.ModelSerializer):
             "id",
             "brand_name",
             "logo",
+            "logo_url",
             "tagline",
             "hero_badge",
             "hero_title",
@@ -68,6 +71,7 @@ class SiteProfileSerializer(serializers.ModelSerializer):
             "hero_card_title",
             "hero_card_body",
             "hero_image",
+            "hero_image_url",
             "favicon",
             "favicon_url",
             "availability",
@@ -88,6 +92,13 @@ class SiteProfileSerializer(serializers.ModelSerializer):
             "experience_intro",
             "contact_intro",
             "features_intro",
+            "show_education",
+            "show_features",
+            "show_services",
+            "show_skills",
+            "show_projects",
+            "show_experience",
+            "show_contact",
             "seo_title",
             "seo_description",
             "updated_at",
@@ -122,3 +133,9 @@ class FeatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feature
         fields = ["id", "title", "body", "order", "is_active"]
+
+
+class MediaAssetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MediaAsset
+        fields = ["id", "title", "image", "image_url", "notes", "created_at"]

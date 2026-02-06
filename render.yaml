@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: social-media-portfolio
+    runtime: python
+    plan: free
+    autoDeploy: true
+    buildCommand: bash scripts/render-build.sh
+    startCommand: gunicorn portfolio.wsgi
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: DJANGO_SETTINGS_MODULE
+        value: "portfolio.settings"
+      - key: PYTHONUNBUFFERED
+        value: "1"

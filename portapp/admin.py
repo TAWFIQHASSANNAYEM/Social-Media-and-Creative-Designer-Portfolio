@@ -10,6 +10,7 @@ from portapp.models import (
     Skill,
     SocialLink,
     Feature,
+    MediaAsset,
 )
 
 admin.site.register(Category)
@@ -22,4 +23,5 @@ admin.site.register(Service)
 admin.site.register(Highlight)
 admin.site.register(SocialLink)
 admin.site.register(Feature)
+admin.site.register(MediaAsset)
 

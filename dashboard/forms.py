@@ -5,6 +5,7 @@ from portapp.models import (
     Experience,
     Feature,
     Highlight,
+    MediaAsset,
     Project,
     Service,
     SiteProfile,
@@ -37,6 +38,7 @@ class SiteProfileForm(StyledModelForm):
         fields = [
             "brand_name",
             "logo",
+            "logo_url",
             "tagline",
             "hero_badge",
             "hero_title",
@@ -44,6 +46,7 @@ class SiteProfileForm(StyledModelForm):
             "hero_card_title",
             "hero_card_body",
             "hero_image",
+            "hero_image_url",
             "favicon",
             "favicon_url",
             "availability",
@@ -64,6 +67,13 @@ class SiteProfileForm(StyledModelForm):
             "experience_intro",
             "contact_intro",
             "features_intro",
+            "show_education",
+            "show_features",
+            "show_services",
+            "show_skills",
+            "show_projects",
+            "show_experience",
+            "show_contact",
             "seo_title",
             "seo_description",
         ]
@@ -115,9 +125,18 @@ class SkillForm(StyledModelForm):
 class ProjectForm(StyledModelForm):
     class Meta:
         model = Project
-        fields = ["title", "description", "image", "category", "url"]
+        fields = ["title", "description", "image", "image_url", "category", "url"]
         widgets = {
             "description": forms.Textarea(attrs={"rows": 5}),
+        }
+
+
+class MediaAssetForm(StyledModelForm):
+    class Meta:
+        model = MediaAsset
+        fields = ["title", "image", "image_url", "notes"]
+        widgets = {
+            "notes": forms.Textarea(attrs={"rows": 4}),
         }
 
 

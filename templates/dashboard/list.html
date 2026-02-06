@@ -62,9 +62,31 @@
                 {% endwith %}
               {% endfor %}
               <td class="px-4 py-3">
-                <div class="flex gap-2">
+                <div class="flex gap-3 items-center flex-wrap">
                   <a class="text-blush-600 hover:underline" href="{% url edit_url_name item.pk %}">Edit</a>
                   <a class="text-rose-600 hover:underline" href="{% url delete_url_name item.pk %}">Delete</a>
+                  {% if allow_quick_edit and (has_order or has_active) %}
+                    <form method="post" action="{% url 'dashboard:quick_update' model_key item.pk %}" class="flex items-center gap-2">
+                      {% csrf_token %}
+                      {% if has_order %}
+                        <input
+                          type="number"
+                          name="order"
+                          value="{{ item.order }}"
+                          class="w-20 rounded-full border border-blush-200 px-3 py-1 text-xs"
+                        />
+                      {% endif %}
+                      {% if has_active %}
+                        <label class="flex items-center gap-1 text-xs text-slate-500">
+                          <input type="checkbox" name="is_active" {% if item.is_active %}checked{% endif %} />
+                          Active
+                        </label>
+                      {% endif %}
+                      <button class="rounded-full border border-blush-200 px-3 py-1 text-xs text-blush-600">
+                        Save
+                      </button>
+                    </form>
+                  {% endif %}
                 </div>
               </td>
             </tr>

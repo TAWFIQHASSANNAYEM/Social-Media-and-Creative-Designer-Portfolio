@@ -39,10 +39,10 @@
       };
     </script>
   </head>
-  <body class="bg-blush-50 font-body text-slate-800">
+  <body class="bg-gradient-to-br from-rose-50 via-white to-pink-50 font-body text-slate-800">
     <div class="min-h-screen lg:flex">
       <aside
-        class="bg-gradient-to-b from-blush-600 to-blush-400 text-white lg:w-72 px-6 py-8"
+        class="bg-gradient-to-b from-blush-600 via-blush-500 to-blush-400 text-white lg:w-72 px-6 py-8 shadow-2xl"
       >
         <div class="flex items-center gap-3">
           <div
@@ -57,11 +57,12 @@
         </div>
 
         <nav class="mt-10 space-y-2 text-sm">
-          <a href="{% url 'dashboard:home' %}" class="block rounded-xl px-4 py-2 bg-white/10 hover:bg-white/20">Overview</a>
+          <a href="{% url 'dashboard:home' %}" class="block rounded-xl px-4 py-2 bg-white/15 hover:bg-white/25">Overview</a>
           <a href="{% url 'dashboard:profile' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Site Profile</a>
-          <a href="{% url 'dashboard:about_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">About Cards</a>
+          <a href="{% url 'dashboard:about_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Education</a>
           <a href="{% url 'dashboard:service_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Services</a>
           <a href="{% url 'dashboard:feature_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Features</a>
+          <a href="{% url 'dashboard:media_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Media Assets</a>
           <a href="{% url 'dashboard:highlight_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Highlights</a>
           <a href="{% url 'dashboard:social_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Social Links</a>
           <a href="{% url 'dashboard:skill_list' %}" class="block rounded-xl px-4 py-2 hover:bg-white/20">Skills</a>
@@ -81,7 +82,7 @@
       </aside>
 
       <main class="flex-1 px-6 py-8 lg:px-10">
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-6xl mx-auto">
           {% if messages %}
             <div class="space-y-2 mb-6">
               {% for message in messages %}

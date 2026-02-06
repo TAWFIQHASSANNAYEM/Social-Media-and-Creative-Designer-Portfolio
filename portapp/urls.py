@@ -13,6 +13,7 @@ router.register(r'services', views.ServiceViewSet)
 router.register(r'highlights', views.HighlightViewSet)
 router.register(r'socials', views.SocialLinkViewSet)
 router.register(r'features', views.FeatureViewSet)
+router.register(r'media-assets', views.MediaAssetViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

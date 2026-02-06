@@ -1,4 +1,5 @@
 from django.db import models
+from .models_media import MediaAsset
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -10,6 +11,7 @@ class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     image = models.ImageField(upload_to='projects/')
+    image_url = models.URLField(blank=True)
     category = models.CharField(max_length=100)
     date_created = models.DateField(auto_now_add=True)
     url = models.URLField(blank=True, null=True)
@@ -38,6 +40,7 @@ class Experience(models.Model):
 class SiteProfile(models.Model):
     brand_name = models.CharField(max_length=120, default="Studio Bloom")
     logo = models.ImageField(upload_to="branding/", blank=True, null=True)
+    logo_url = models.URLField(blank=True)
     tagline = models.CharField(max_length=200, blank=True)
     hero_badge = models.CharField(max_length=120, blank=True)
     hero_title = models.CharField(max_length=200, default="Hi, I’m Iqra")
@@ -45,6 +48,7 @@ class SiteProfile(models.Model):
     hero_card_title = models.CharField(max_length=120, blank=True)
     hero_card_body = models.TextField(blank=True)
     hero_image = models.ImageField(upload_to="profile/", blank=True, null=True)
+    hero_image_url = models.URLField(blank=True)
     favicon = models.ImageField(upload_to="branding/", blank=True, null=True)
     favicon_url = models.URLField(blank=True)
     availability = models.CharField(max_length=120, blank=True)
@@ -65,6 +69,13 @@ class SiteProfile(models.Model):
     experience_intro = models.TextField(blank=True)
     contact_intro = models.TextField(blank=True)
     features_intro = models.TextField(blank=True)
+    show_education = models.BooleanField(default=True)
+    show_features = models.BooleanField(default=True)
+    show_services = models.BooleanField(default=True)
+    show_skills = models.BooleanField(default=True)
+    show_projects = models.BooleanField(default=True)
+    show_experience = models.BooleanField(default=True)
+    show_contact = models.BooleanField(default=True)
     seo_title = models.CharField(max_length=160, blank=True)
     seo_description = models.TextField(blank=True)
     updated_at = models.DateTimeField(auto_now=True)

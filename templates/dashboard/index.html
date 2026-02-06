@@ -6,7 +6,10 @@
   <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-2">
       <h1 class="font-heading text-3xl">Dashboard Overview</h1>
-      <p class="text-sm text-slate-500">Quick insights and shortcuts to update your site.</p>
+      <p class="text-sm text-slate-500">Quick insights, shortcuts, and content controls.</p>
+      <div class="text-xs text-slate-400">
+        Last login: {{ last_login|default:"-" }} · Server time: {{ now }}
+      </div>
     </div>
 
     <div class="grid gap-4 md:grid-cols-3">
@@ -26,6 +29,7 @@
           <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:project_create' %}">Add a new project</a></li>
           <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:service_create' %}">Add a service</a></li>
           <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:highlight_create' %}">Add a highlight</a></li>
+          <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:media_create' %}">Upload a media asset</a></li>
         </ul>
       </div>
       <div class="rounded-2xl bg-white p-6 shadow">

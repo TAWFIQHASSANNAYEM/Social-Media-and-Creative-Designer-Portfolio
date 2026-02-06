@@ -4,6 +4,8 @@ from django.contrib.auth.views import LoginView
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils import timezone
+from django.http import HttpResponseBadRequest
 from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView
 
 from hitcount.models import HitCount
@@ -12,6 +14,7 @@ from portapp.models import (
     Experience,
     Feature,
     Highlight,
+    MediaAsset,
     Project,
     Service,
     SiteProfile,
@@ -24,6 +27,7 @@ from .forms import (
     ExperienceForm,
     FeatureForm,
     HighlightForm,
+    MediaAssetForm,
     ProjectForm,
     ServiceForm,
     SiteProfileForm,
@@ -49,9 +53,12 @@ class DashboardHomeView(LoginRequiredMixin, TemplateView):
             {"label": "Services", "value": Service.objects.count()},
             {"label": "Highlights", "value": Highlight.objects.count()},
             {"label": "Features", "value": Feature.objects.count()},
+            {"label": "Media Assets", "value": MediaAsset.objects.count()},
             {"label": "Social Links", "value": SocialLink.objects.count()},
             {"label": "Site Visits", "value": total_hits},
         ]
+        context["last_login"] = self.request.user.last_login
+        context["now"] = timezone.now()
         return context
 
 
@@ -70,6 +77,8 @@ class DashboardListView(LoginRequiredMixin, ListView):
     columns = []
     search_fields = []
     empty_message = "No items found."
+    allow_quick_edit = True
+    model_key = ""
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -83,6 +92,8 @@ class DashboardListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        has_order = any(col.get("name") == "order" for col in self.columns)
+        has_active = any(col.get("name") == "is_active" for col in self.columns)
         context.update(
             {
                 "title": self.title,
@@ -92,9 +103,51 @@ class DashboardListView(LoginRequiredMixin, ListView):
                 "columns": self.columns,
                 "search_query": self.request.GET.get("q", ""),
                 "empty_message": self.empty_message,
+                "allow_quick_edit": self.allow_quick_edit,
+                "model_key": self.model_key,
+                "has_order": has_order,
+                "has_active": has_active,
             }
         )
         return context
+
+
+@login_required
+def quick_update(request, model_name, pk):
+    if request.method != "POST":
+        return HttpResponseBadRequest("Invalid request")
+
+    model_map = {
+        "about": AboutCard,
+        "service": Service,
+        "highlight": Highlight,
+        "feature": Feature,
+        "social": SocialLink,
+        "skill": Skill,
+        "project": Project,
+        "experience": Experience,
+        "media": MediaAsset,
+    }
+
+    model = model_map.get(model_name)
+    if not model:
+        return HttpResponseBadRequest("Unknown model")
+
+    obj = model.objects.get(pk=pk)
+    fields = {}
+    if "order" in request.POST:
+        try:
+            fields["order"] = int(request.POST.get("order") or 0)
+        except ValueError:
+            fields["order"] = 0
+    if "is_active" in request.POST:
+        fields["is_active"] = request.POST.get("is_active") == "on"
+
+    for key, value in fields.items():
+        setattr(obj, key, value)
+    if fields:
+        obj.save()
+    return redirect(request.META.get("HTTP_REFERER", reverse_lazy("dashboard:home")))
 
 
 class DashboardCreateView(LoginRequiredMixin, CreateView):
@@ -149,10 +202,11 @@ def profile_edit(request):
 
 class AboutCardListView(DashboardListView):
     model = AboutCard
-    title = "About Cards"
+    title = "Education"
     create_url_name = "dashboard:about_create"
     edit_url_name = "dashboard:about_edit"
     delete_url_name = "dashboard:about_delete"
+    model_key = "about"
     search_fields = ["title", "body"]
     columns = [
         {"name": "title", "label": "Title"},
@@ -190,6 +244,7 @@ class ServiceListView(DashboardListView):
     create_url_name = "dashboard:service_create"
     edit_url_name = "dashboard:service_edit"
     delete_url_name = "dashboard:service_delete"
+    model_key = "service"
     search_fields = ["title", "body"]
     columns = [
         {"name": "title", "label": "Title"},
@@ -227,6 +282,7 @@ class HighlightListView(DashboardListView):
     create_url_name = "dashboard:highlight_create"
     edit_url_name = "dashboard:highlight_edit"
     delete_url_name = "dashboard:highlight_delete"
+    model_key = "highlight"
     search_fields = ["label", "value"]
     columns = [
         {"name": "value", "label": "Value"},
@@ -265,6 +321,7 @@ class SocialLinkListView(DashboardListView):
     create_url_name = "dashboard:social_create"
     edit_url_name = "dashboard:social_edit"
     delete_url_name = "dashboard:social_delete"
+    model_key = "social"
     search_fields = ["label", "url", "icon"]
     columns = [
         {"name": "label", "label": "Label"},
@@ -304,6 +361,7 @@ class FeatureListView(DashboardListView):
     create_url_name = "dashboard:feature_create"
     edit_url_name = "dashboard:feature_edit"
     delete_url_name = "dashboard:feature_delete"
+    model_key = "feature"
     search_fields = ["title", "body"]
     columns = [
         {"name": "title", "label": "Title"},
@@ -335,6 +393,45 @@ class FeatureDeleteView(DashboardDeleteView):
     cancel_url = "dashboard:feature_list"
 
 
+class MediaAssetListView(DashboardListView):
+    model = MediaAsset
+    title = "Media Assets"
+    create_url_name = "dashboard:media_create"
+    edit_url_name = "dashboard:media_edit"
+    delete_url_name = "dashboard:media_delete"
+    search_fields = ["title", "notes"]
+    columns = [
+        {"name": "image", "label": "Preview", "type": "image"},
+        {"name": "title", "label": "Title"},
+        {"name": "created_at", "label": "Created"},
+    ]
+    allow_quick_edit = False
+    model_key = "media"
+
+
+class MediaAssetCreateView(DashboardCreateView):
+    model = MediaAsset
+    form_class = MediaAssetForm
+    title = "Add Media Asset"
+    success_url = reverse_lazy("dashboard:media_list")
+    cancel_url = "dashboard:media_list"
+
+
+class MediaAssetUpdateView(DashboardUpdateView):
+    model = MediaAsset
+    form_class = MediaAssetForm
+    title = "Edit Media Asset"
+    success_url = reverse_lazy("dashboard:media_list")
+    cancel_url = "dashboard:media_list"
+
+
+class MediaAssetDeleteView(DashboardDeleteView):
+    model = MediaAsset
+    title = "Delete Media Asset"
+    success_url = reverse_lazy("dashboard:media_list")
+    cancel_url = "dashboard:media_list"
+
+
 
 
 class SkillListView(DashboardListView):
@@ -343,6 +440,7 @@ class SkillListView(DashboardListView):
     create_url_name = "dashboard:skill_create"
     edit_url_name = "dashboard:skill_edit"
     delete_url_name = "dashboard:skill_delete"
+    model_key = "skill"
     search_fields = ["name", "proficiency"]
     columns = [
         {"name": "name", "label": "Name"},
@@ -379,6 +477,7 @@ class ProjectListView(DashboardListView):
     create_url_name = "dashboard:project_create"
     edit_url_name = "dashboard:project_edit"
     delete_url_name = "dashboard:project_delete"
+    model_key = "project"
     search_fields = ["title", "description", "category"]
     columns = [
         {"name": "image", "label": "Image", "type": "image"},
@@ -417,6 +516,7 @@ class ExperienceListView(DashboardListView):
     create_url_name = "dashboard:experience_create"
     edit_url_name = "dashboard:experience_edit"
     delete_url_name = "dashboard:experience_delete"
+    model_key = "experience"
     search_fields = ["job_title", "company", "description"]
     columns = [
         {"name": "job_title", "label": "Role"},

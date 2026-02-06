@@ -272,6 +272,11 @@ const resolveImage = (value) => {
   return `/media/${value}`;
 };
 
+const resolveMedia = (uploadValue, urlValue) => {
+  if (urlValue) return urlValue;
+  return resolveImage(uploadValue);
+};
+
 const filterActive = (items) =>
   items.filter((item) => item.is_active !== false);
 
@@ -465,9 +470,9 @@ export default function App() {
       <header className="site-header">
         <div className="container nav">
           <a className="brand" href="/">
-            {content.profile?.logo ? (
+            {content.profile?.logo || content.profile?.logo_url ? (
               <img
-                src={resolveImage(content.profile.logo)}
+                src={resolveMedia(content.profile.logo, content.profile.logo_url)}
                 alt={content.profile?.brand_name}
                 className="brand-logo"
               />
@@ -547,9 +552,12 @@ export default function App() {
 
           <div className="hero-card reveal" style={{ "--delay": "0.1s" }}>
             <div className="portrait">
-              {content.profile?.hero_image ? (
+              {content.profile?.hero_image || content.profile?.hero_image_url ? (
                 <img
-                  src={resolveImage(content.profile.hero_image)}
+                  src={resolveMedia(
+                    content.profile.hero_image,
+                    content.profile.hero_image_url
+                  )}
                   alt={content.profile?.brand_name}
                   className="portrait-image"
                 />
@@ -566,6 +574,7 @@ export default function App() {
           </div>
         </section>
 
+        {content.profile?.show_education !== false && (
         <section id="about">
           <div className="container">
             <h2 className="section-title">Education</h2>
@@ -587,7 +596,9 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
 
+        {content.profile?.show_features !== false && (
         <section id="features">
           <div className="container">
             <h2 className="section-title">Featured strengths</h2>
@@ -609,7 +620,9 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
 
+        {content.profile?.show_services !== false && (
         <section id="services">
           <div className="container">
             <h2 className="section-title">Services I love</h2>
@@ -631,8 +644,10 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
 
 
+        {content.profile?.show_skills !== false && (
         <section id="skills">
           <div className="container">
             <h2 className="section-title">Skill stack</h2>
@@ -661,7 +676,9 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
 
+        {content.profile?.show_projects !== false && (
         <section id="work">
           <div className="container">
             <h2 className="section-title">Selected work</h2>
@@ -705,9 +722,9 @@ export default function App() {
                       style={{ "--delay": `${index * 0.08}s` }}
                     >
                       <div className="project-image">
-                        {project.image ? (
+                        {project.image || project.image_url ? (
                           <img
-                            src={resolveImage(project.image)}
+                            src={resolveMedia(project.image, project.image_url)}
                             alt={project.title}
                             loading="lazy"
                           />
@@ -739,7 +756,9 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
 
+        {content.profile?.show_experience !== false && (
         <section id="experience">
           <div className="container">
             <h2 className="section-title">Experience</h2>
@@ -766,7 +785,9 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
 
+        {content.profile?.show_contact !== false && (
         <section id="contact">
           <div className="container">
             <h2 className="section-title">Lets create together</h2>
@@ -813,6 +834,7 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
       </main>
 
       <footer className="footer">
