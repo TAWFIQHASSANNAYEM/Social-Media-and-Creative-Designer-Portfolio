@@ -15,7 +15,7 @@ SECRET_KEY = config(
 DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = [
-    host.strip()
+    host.strip().lower()
     for host in config(
         "ALLOWED_HOSTS",
         default="localhost,127.0.0.1",
@@ -24,7 +24,7 @@ ALLOWED_HOSTS = [
 ]
 
 def _normalize_host(value: str) -> str:
-    value = value.strip()
+    value = value.strip().lower()
     if not value:
         return ""
     if "://" in value:
