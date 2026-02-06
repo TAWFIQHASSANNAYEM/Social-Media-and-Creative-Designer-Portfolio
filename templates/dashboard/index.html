@@ -14,7 +14,7 @@
 
     <div class="grid gap-4 md:grid-cols-3">
       {% for stat in stats %}
-        <div class="rounded-2xl bg-white p-5 shadow">
+        <div class="rounded-2xl bg-white/90 backdrop-blur p-5 shadow-lg">
           <p class="text-xs uppercase tracking-wide text-slate-400">{{ stat.label }}</p>
           <p class="mt-2 font-heading text-3xl text-blush-600">{{ stat.value }}</p>
         </div>
@@ -22,7 +22,7 @@
     </div>
 
     <div class="grid gap-4 md:grid-cols-2">
-      <div class="rounded-2xl bg-white p-6 shadow">
+      <div class="rounded-2xl bg-white/90 backdrop-blur p-6 shadow-lg">
         <h2 class="font-heading text-xl">Quick actions</h2>
         <ul class="mt-4 space-y-3 text-sm text-slate-600">
           <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:profile' %}">Edit site profile</a></li>
@@ -32,7 +32,7 @@
           <li><a class="text-blush-600 hover:underline" href="{% url 'dashboard:media_create' %}">Upload a media asset</a></li>
         </ul>
       </div>
-      <div class="rounded-2xl bg-white p-6 shadow">
+      <div class="rounded-2xl bg-white/90 backdrop-blur p-6 shadow-lg">
         <h2 class="font-heading text-xl">Need to update the front page?</h2>
         <p class="mt-3 text-sm text-slate-600">
           Update the Site Profile, About Cards, Services, and Highlights sections to

@@ -3,7 +3,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-  <div class="rounded-2xl bg-white p-8 shadow">
+  <div class="rounded-2xl bg-white/90 backdrop-blur p-8 shadow-lg">
     <div class="flex items-center justify-between">
       <h1 class="font-heading text-2xl">{{ title }}</h1>
       {% if cancel_url %}

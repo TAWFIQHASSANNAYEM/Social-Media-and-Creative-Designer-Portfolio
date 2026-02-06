@@ -22,16 +22,24 @@
             },
             colors: {
               blush: {
-                50: "#fff1f7",
-                100: "#ffe3ef",
-                200: "#ffc7e1",
-                300: "#ff9cc8",
-                400: "#ff77b2",
-                500: "#ff4f9b",
-                600: "#e43b86",
-                700: "#bf2f6e",
-                800: "#992555",
-                900: "#6f1b3e",
+                50: "#fff5f8",
+                100: "#ffe9f1",
+                200: "#ffd1e3",
+                300: "#ffb3d1",
+                400: "#ff8bb8",
+                500: "#ff6aa2",
+                600: "#e85690",
+                700: "#c84677",
+                800: "#9e365e",
+                900: "#6d2442",
+              },
+              lilac: {
+                50: "#f6f2ff",
+                100: "#ede4ff",
+              },
+              champagne: {
+                50: "#fff9f2",
+                100: "#fff1e1",
               },
             },
           },
@@ -39,14 +47,14 @@
       };
     </script>
   </head>
-  <body class="bg-gradient-to-br from-rose-50 via-white to-pink-50 font-body text-slate-800">
+  <body class="bg-gradient-to-br from-champagne-50 via-white to-lilac-50 font-body text-slate-800">
     <div class="min-h-screen lg:flex">
       <aside
         class="bg-gradient-to-b from-blush-600 via-blush-500 to-blush-400 text-white lg:w-72 px-6 py-8 shadow-2xl"
       >
         <div class="flex items-center gap-3">
           <div
-            class="h-10 w-10 rounded-2xl bg-white/20 flex items-center justify-center font-heading text-lg"
+            class="h-11 w-11 rounded-2xl bg-white/20 flex items-center justify-center font-heading text-lg shadow-inner"
           >
             ✨
           </div>
@@ -86,7 +94,7 @@
           {% if messages %}
             <div class="space-y-2 mb-6">
               {% for message in messages %}
-                <div class="rounded-xl bg-white p-4 text-sm shadow">
+                <div class="rounded-2xl bg-white/90 backdrop-blur p-4 text-sm shadow">
                   {{ message }}
                 </div>
               {% endfor %}
