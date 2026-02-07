@@ -5,6 +5,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 
 cd frontend
+rm -rf dist
 npm install
 npm run build
 cd ..
