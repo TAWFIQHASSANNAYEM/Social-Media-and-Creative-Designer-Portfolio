@@ -1,4 +1,17 @@
-# Use Python 3.11 slim image
+# Build frontend
+FROM node:18 as frontend-build
+
+WORKDIR /frontend
+
+COPY frontend/package*.json ./
+
+RUN npm install
+
+COPY frontend/ ./
+
+RUN npm run build
+
+# Python application
 FROM python:3.11-slim
 
 # Set environment variables
@@ -21,6 +34,15 @@ RUN pip install -r requirements.txt
 
 # Copy project
 COPY . .
+
+# Copy built frontend
+COPY --from=frontend-build /frontend/dist ./frontend/dist
+
+# Run migrations
+RUN python manage.py migrate
+
+# Create superuser if it doesn't exist
+RUN python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').exists() or User.objects.create_superuser('admin', 'admin@example.com', 'admin123')" && echo "Superuser created: admin/admin123"
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
