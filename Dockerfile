@@ -42,7 +42,10 @@ COPY --from=frontend-build /frontend/dist ./frontend/dist
 RUN python manage.py migrate
 
 # Create superuser if it doesn't exist
-RUN python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').exists() or User.objects.create_superuser('admin', 'admin@example.com', 'admin123')" && echo "Superuser created: admin/admin123"
+RUN python manage.py create_superuser
+
+# Seed demo data
+RUN python manage.py seed_demo
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
